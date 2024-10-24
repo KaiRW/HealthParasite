@@ -6,7 +6,7 @@
 import subprocess
 import sys
 
-verts = [0.0, 1.0]
+spatial = [0,1]
 
 def cmd(command):
     '''This wait causes all executions to run in sieries.                          
@@ -21,7 +21,7 @@ def silent_cmd(command):
     return subprocess.Popen(command, shell=True, stdout=subprocess.PIPE).wait()
 
 start_range = 10
-end_range = 20
+end_range = 21
 
 #collect optional command line arguments
 if(len(sys.argv) > 1):
@@ -43,9 +43,9 @@ seeds = range(start_range, end_range)
 print("Using seeds", start_range, "through", end_range-1)
 
 for a in seeds:
-    for b in verts:
-        command_str = './symbulation_default -SEED '+str(a)+ ' -VERTICAL_TRANSMISSION ' +str(b)+ ' -FILE_NAME _VT'+str(b)
-        settings_filename = "Output_VT"+str(b)+"_SEED"+str(a)+".data"
+    for b in spatial:
+        command_str = './symbulation_parasite -SEED '+str(a)+ ' -GRID ' +str(b)+ ' -FILE_NAME _Grid'+str(b)
+        settings_filename = "Output_Grid"+str(b)+"_Para1"+"_SEED"+str(a)+".data"
 
         print(command_str)
         cmd(command_str+" > "+settings_filename)

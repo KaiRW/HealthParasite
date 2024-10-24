@@ -1,9 +1,9 @@
 import os.path
 import gzip
 
-folder = '../../Data/sample_treatment/'
+folder = '../../Data/NoParaSpatial/'
 
-treatment_postfixes = ["VT0.0", "VT1.0"]
+treatment_postfixes = ["GRID0.0", "GRID1.0"]
 partners = ["Host", "Sym"]
 reps = range(21,26)
 header = "uid treatment rep update donate partner\n"
@@ -16,7 +16,7 @@ outFile.write(header)
 for t in treatment_postfixes:
     for r in reps:
         for p in partners:
-            fname = folder +p+"Vals_" + t +"_SEED" + str(r)+ ".data"
+            fname = folder +p+"Tasks_" + t +"_SEED" + str(r)+ ".data"
             uid = t + "_" + str(r)
             curFile = open(fname, 'r')
             for line in curFile:

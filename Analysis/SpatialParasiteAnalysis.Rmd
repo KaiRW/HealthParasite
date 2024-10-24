@@ -1,0 +1,66 @@
+```{r}
+library(ggplot2)
+library(tidyverse)
+library(viridis)
+library(scales)
+```
+
+```{r}
+task_list <- c("NOT", "NAND", "AND", "ORN", "OR", "ANDN", "NOR", "XOR", "EQU")
+
+read_single_file <- function(munged_data, seed, grid_setting, parasite_folder) {
+  filename <- paste("../Data/sample_treatment/", parasite_folder, "/Tasks_Grid", 
+                    grid_setting, "_SEED", seed, ".data", sep="")
+  current_table <- read.csv(filename, h = T)
+  
+  for (i in 1:nrow(current_table)) {
+    for (j in 1:length(task_list)){
+      current_row_host <- data.frame(uid = paste("Grid", grid_setting, "_", seed, sep=""),
+                              treatment = paste("Grid", grid_setting, sep=""),
+                              rep = seed,
+                              update = current_table[i,1],
+                              task = task_list[j],
+                              count = current_table[i, 2 * j],
+                              partner = "Host")
+      munged_data <- rbind(munged_data, current_row_host)
+      
+      current_row_parasite <- data.frame(uid = paste("Grid", grid_setting, "_", seed, sep=""),
+                              treatment = paste("Grid", grid_setting, sep=""),
+                              rep = seed,
+                              update = current_table[i,1],
+                              task = task_list[j],
+                              count = current_table[i, 2 * j + 1],
+                              partner = "Parasite")
+      munged_data <- rbind(munged_data, current_row_parasite)
+    }
+  }
+  
+  return(munged_data)
+}
+
+read_all_files <- function() {
+  munged_data <- data.frame(uid = character(),
+                            treatment = character(),
+                            rep = integer(),
+                            update = integer(),
+                            task = character(),
+                            count = integer(),
+                            partner = character())
+  
+  for (seed in 10:20) {
+    munged_data <- read_single_file(munged_data, seed, 0, "ParaSpatial")
+    munged_data <- read_single_file(munged_data, seed, 0, "NoParaSpatial")
+    munged_data <- read_single_file(munged_data, seed, 1, "ParaSpatial")
+    munged_data <- read_single_file(munged_data, seed, 1, "NoParaSpatial")
+  }
+  
+  return(munged_data)
+}
+```
+
+```{r}
+munged_data <- read_all_files()
+```
+
+
+
